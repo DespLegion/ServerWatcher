@@ -1,0 +1,12 @@
+[Unit]
+Description=Server watcher service
+
+[Service]
+WorkingDirectory=/home/watcher/ServerWatcher
+Type=simple
+ExecStart=/home/watcher/ServerWatcher/venv/bin/python /home/watcher/ServerWatcher/core.py
+Restart=always
+RestartSec=120
+
+[Install]
+WantedBy=multi-user.target

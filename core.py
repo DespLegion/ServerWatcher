@@ -23,25 +23,66 @@ async def on_ready():
     print(f'Logged in as {bot.user.name}')
     global start_time
     start_time = datetime.now()
+    sleep_time = settings['sleep time']
 
     while True:
-        await bot.change_presence(
-            status=discord.Status.online,
-            activity=discord.Game(f'CPU: {psutil.cpu_percent()}%')
-        )
-        await sleep(settings['sleep time'])
-        await bot.change_presence(
-            status=discord.Status.online,
-            activity=discord.Game(f'RAM: {psutil.virtual_memory().percent}%')
-        )
-        await sleep(settings['sleep time'])
-        now = datetime.now()
-        uptime_c = now - start_time
-        await bot.change_presence(
-            status=discord.Status.online,
-            activity=discord.Game(f'Uptime: {format_timedelta(uptime_c)}')
-        )
-        await sleep(settings['sleep time'])
+        try:
+            cpu_stats = psutil.cpu_percent()
+            try:
+                await bot.change_presence(
+                    status=discord.Status.online,
+                    activity=discord.Game(f'CPU: {cpu_stats}%')
+                )
+            except Exception:
+                await bot.change_presence(
+                    status=discord.Status.do_not_disturb,
+                    activity=discord.Game(f'CPU status update Error')
+                )
+        except Exception:
+            await bot.change_presence(
+                status=discord.Status.do_not_disturb,
+                activity=discord.Game(f'CPU update Error')
+            )
+        await sleep(sleep_time)
+
+        try:
+            vr_memory_stats = psutil.virtual_memory().percent
+            try:
+                await bot.change_presence(
+                    status=discord.Status.online,
+                    activity=discord.Game(f'RAM: {vr_memory_stats}%')
+                )
+            except Exception:
+                await bot.change_presence(
+                    status=discord.Status.do_not_disturb,
+                    activity=discord.Game(f'RAM status update Error')
+                )
+        except Exception:
+            await bot.change_presence(
+                status=discord.Status.do_not_disturb,
+                activity=discord.Game(f'RAM update Error')
+            )
+        await sleep(sleep_time)
+
+        try:
+            now = datetime.now()
+            uptime_c = now - start_time
+            try:
+                await bot.change_presence(
+                    status=discord.Status.online,
+                    activity=discord.Game(f'Uptime: {format_timedelta(uptime_c)}')
+                )
+            except Exception:
+                await bot.change_presence(
+                    status=discord.Status.do_not_disturb,
+                    activity=discord.Game(f'Uptime status update Error')
+                )
+        except Exception:
+            await bot.change_presence(
+                status=discord.Status.do_not_disturb,
+                activity=discord.Game(f'Uptime update Error')
+            )
+        await sleep(sleep_time)
 
 
 @bot.command()
