@@ -1,0 +1,6 @@
+__pycache__/
+src/core/__pycache__/
+.idea/
+venv/
+
+/config_dev.py
