@@ -8,12 +8,15 @@
 1) `status` - Отображает актуальный статус системных ресурсов
 
 ![](https://i.ibb.co/tm3bzm2/sys-status.jpg)
+
 2) `system` - Отображает общие ресурсы системы
 
 ![](https://i.ibb.co/vv4Ht6X/Sys-info.jpg)
+
 3) `net` - Отображает актуальную статистику использования сети
 
 ![](https://i.ibb.co/vVdqhxw/net-status.jpg)
+
 4) `shutdown` - Завершение работы приложения (бота)
 
 ## Требования
