@@ -38,32 +38,34 @@
 
 #### На основе шаблона:
 
-Вместе с проектом идет шаблон .bat файла `\autorun\watcher.bat`.
+Вместе с проектом идет шаблон `.bat` файла `\autorun\watcher.bat`.
 1) Создайте ярлык .bat файла
 2) Поместите ярлык в папку автозагрузки Windows `C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp`
-Или добавьте .bat файл в планировщик задач Windows
+Или добавьте `.bat` файл в планировщик задач Windows
 
 #### Если вы хотите вручную создать и заполнить .bat файл:
-1) Создать .bat файл
-2) Прописать в файле путь до `python.exe` (для запуска в фоне `pythonw.exe`) из виртуального окружения. Пример: `D:\"project name"\"env name"\Scripts\python.exe` Далее через пробел прописать путь до `core.py`
-3) Пример: 
+1) Создать `.bat` файл
+2) Через оператор `call` прописать путь до файла активации виртуального окружения `activate.bat`
+3) Указать директорию проекта, в которой находится исполняемый файл `core.py`
+4) Прописать запуск исполняемого файла `core.py` через `python.exe` (для запуска в фоне `pythonw.exe`)
+5) Пример: 
 ```
 @echo off
-C:\ServerWatcher\venv\Scripts\pythonw.exe C:\ServerWatcher\core.py
+call C:\Watcher\ServerWatcher\venv\Scripts\activate.bat && cd C:\Watcher\ServerWatcher && pythonw core.py
 ```
 4) Добавить .bat файл в автозагрузку или в планировщик задач Windows
 
 ### Linux
 
 #### На основе шаблона:
-Вместе с проектом идет шаблон service файла `\autorun\watcher.service`. 
-1) Создайте символическу ссылку на service файл идущий вместе с проектом командой: `ln -s /home/watcher/ServerWatcher/autorun/watcher.service /usr/lib/systemd/system/watcher.service`
-2) После создания/изменения systemd файла необходимо перезапустить демона: `sudo systemctl daemon-reload`
+Вместе с проектом идет шаблон `service` файла `\autorun\watcher.service`. 
+1) Создайте символическу ссылку на `service` файл идущий вместе с проектом командой: `ln -s /home/watcher/ServerWatcher/autorun/watcher.service /usr/lib/systemd/system/watcher.service`
+2) После создания/изменения `systemd` файла необходимо перезапустить демона: `sudo systemctl daemon-reload`
 3) Активируйте сервис командой `sudo systemctl enable "project name.service"`
 4) Запустите сервис командой `sudo systemctl start "project name".service`
 
-#### Если вы хотите вручную создать и заполнить service файл:
-1) Создайте systemd файл проета по пути `/lib/systemd/system/"project name".service`
+#### Если вы хотите вручную создать и заполнить `service` файл:
+1) Создайте `systemd` файл проета по пути `/lib/systemd/system/"project name".service`
 2) Пример заполнения 
 ``` 
 [Unit]
@@ -79,7 +81,7 @@ RestartSec=120
 [Install]
 WantedBy=multi-user.target
 ```
-3) После создания/изменения systemd файла необходимо перезапустить демона: `sudo systemctl daemon-reload`
+3) После создания/изменения `systemd` файла необходимо перезапустить демона: `sudo systemctl daemon-reload`
 4) Активируйте сервис командой `sudo systemctl enable "project name.service"`
 5) Запустите сервис командой `sudo systemctl start "project name".service`
 
@@ -96,3 +98,6 @@ WantedBy=multi-user.target
 2) Добавлены Таймауты для обновления статуса бота
 3) Добавлено логирование ошибок при обновлении статуса бота
 4) Обновлен config файл (ВАЖНО!)
+
+#### 1.2.1
+1) Обновлен шаблон .bat файла для Windows

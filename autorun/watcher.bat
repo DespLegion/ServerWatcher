@@ -1,2 +1,2 @@
 @echo off
-C:\Watcher\ServerWatcher\venv\Scripts\pythonw.exe C:\Watcher\ServerWatcher\core.py
+call C:\Watcher\ServerWatcher\venv\Scripts\activate.bat && cd C:\Watcher\ServerWatcher && pythonw core.py
