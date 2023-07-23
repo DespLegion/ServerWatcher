@@ -1,5 +1,4 @@
 import asyncio
-import logging as log
 
 import discord
 import psutil
@@ -8,13 +7,10 @@ from datetime import datetime
 from asyncio import sleep
 
 from src.core.fmt_delta import format_timedelta
+from src.core.logger import CustomLogger
 
-status_logger = log.getLogger(__name__)
-status_logger.setLevel(log.ERROR)
-log_file_handler = log.FileHandler('./logs/status_update_logs.log')
-log_format = log.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
-log_file_handler.setFormatter(log_format)
-status_logger.addHandler(log_file_handler)
+custom_logger = CustomLogger(logger_name=__name__, logfile_name='status_update_logs.log')
+status_logger = custom_logger.create_logger()
 
 
 async def update_cpu_stats(bot, sleep_time):
@@ -23,7 +19,7 @@ async def update_cpu_stats(bot, sleep_time):
         status=discord.Status.online,
         activity=discord.Game(f'CPU: {cpu_stats}%')
     )
-    status_logger.info(f'CPU status updated')
+    status_logger.info(f'CPU status updated successfully!')
     await sleep(sleep_time)
 
 
@@ -33,7 +29,7 @@ async def update_memory_stats(bot, sleep_time):
         status=discord.Status.online,
         activity=discord.Game(f'RAM: {vr_memory_stats}%')
     )
-    status_logger.info(f'RAM status updated')
+    status_logger.info(f'RAM status updated successfully!')
     await sleep(sleep_time)
 
 
@@ -44,13 +40,14 @@ async def uptime_update(bot, sleep_time, start_time):
         status=discord.Status.online,
         activity=discord.Game(f'Uptime: {format_timedelta(uptime_c)}')
     )
-    status_logger.info(f'Uptime status updated')
+    status_logger.info(f'Uptime status updated successfully!')
     await sleep(sleep_time)
 
 
 async def run_status(bot, start_time, sleep_time, timeout):
 
     try:
+        status_logger.info(f'---- Status loop started! ----')
         while True:
             try:
                 await asyncio.wait_for(update_cpu_stats(bot, sleep_time), timeout=timeout)
@@ -82,4 +79,11 @@ async def run_status(bot, start_time, sleep_time, timeout):
                 )
                 await sleep(sleep_time)
     except Exception as err:
-        status_logger.error(f'Status loop brake Error {err}', exc_info=True)
+        status_logger.error(f'Status loop brake Error - {err}', exc_info=True)
+        await re_run_status(bot, start_time, sleep_time, timeout)
+
+
+async def re_run_status(bot, start_time, sleep_time, timeout):
+    status_logger.error(f'---- RE run status Started! ----')
+    await sleep(60)
+    await run_status(bot, start_time, sleep_time, timeout)
