@@ -19,19 +19,21 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix=settings['prefix'], intents=intents)
 
-global start_time
+start_time = datetime.now()
+
+
+@bot.event
+async def on_connect():
+    sleep_time = settings['sleep time']
+    timeout = settings['timeout']
+
+    return await run_status(bot, start_time, sleep_time, timeout)
 
 
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name}')
     core_logger.info(f'Logged in as {bot.user.name} on {bot.guilds}')
-    global start_time
-    start_time = datetime.now()
-    sleep_time = settings['sleep time']
-    timeout = settings['timeout']
-
-    await run_status(bot, start_time, sleep_time, timeout)
 
 
 @bot.command()
