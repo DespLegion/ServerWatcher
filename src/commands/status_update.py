@@ -80,10 +80,10 @@ async def run_status(bot, start_time, sleep_time, timeout):
                 await sleep(sleep_time)
     except Exception as err:
         status_logger.error(f'Status loop brake Error - {err}', exc_info=True)
-        await re_run_status(bot, start_time, sleep_time, timeout)
+        return await re_run_status(bot, start_time, sleep_time, timeout)
 
 
 async def re_run_status(bot, start_time, sleep_time, timeout):
     status_logger.error(f'---- RE run status Started! ----')
-    await sleep(60)
-    await run_status(bot, start_time, sleep_time, timeout)
+    await sleep(300)
+    return await run_status(bot, start_time, sleep_time, timeout)
