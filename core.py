@@ -7,8 +7,9 @@ from src.core.fmt_delta import format_timedelta
 from src.core.fmt_mem import memory_format
 from src.commands.status_update import run_status
 from src.core.logger import CustomLogger
+from src.core.get_os import get_os_name
 
-from config import settings
+from config_dev import settings
 
 custom_logger = CustomLogger(logger_name=__name__, log_level='info', logfile_name='core.log')
 core_logger = custom_logger.create_logger()
@@ -33,6 +34,7 @@ async def on_connect():
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name}')
+    print(f'ON OS -  {get_os_name()}')
     core_logger.info(f'Logged in as {bot.user.name} on {bot.guilds}')
 
 
