@@ -53,10 +53,12 @@ async def status(ctx):
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def system(ctx):
+    os_name = get_os_name()
     disks = psutil.disk_partitions()
     now = datetime.now()
     uptime_c = now - start_time
-    embed = discord.Embed(title='System Resource', description='')
+    embed = discord.Embed(title='System Resources', description='')
+    embed.add_field(name='OS', value=f'{os_name}', inline=False)
     embed.add_field(name='CPU count', value=f'{psutil.cpu_count()}', inline=False)
     embed.add_field(name='Physical CPU count', value=f'{psutil.cpu_count(logical=False)}', inline=False)
     embed.add_field(name='Total RAM memory', value=f'{memory_format(psutil.virtual_memory().total)} GB', inline=False)
